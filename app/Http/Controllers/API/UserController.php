@@ -24,9 +24,20 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function add(Request $request)
     {
-        //
+        $user=new User;
+        $user->name=$request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $result=$user->save();
+        if($result){
+            return["Result"=>"user created succesfully"];
+        }
+        else{
+            return ["Result" => "Failed"];
+        }
+        
     }
 
     /**
@@ -61,6 +72,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $isDeleted = $user->delete();
+        return response()->json(['message' => $isDeleted ? "Deleted successfully" : "Failed to delete"], $isDeleted ? 200 : 400);
     }
 }
