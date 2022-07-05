@@ -14,7 +14,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, SoftDeletes;
 
 
-    protected $dates=['deleted at'];
+    //protected $dates=['deleted at'];
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image',
     ];
 
     /**
@@ -51,12 +52,12 @@ class User extends Authenticatable
 
     public function posts()
     {
-        return $this->hasMany('App\Post');
+        return $this->hasMany(Post::class,'user_id');
     }
 
     public function comments()
     {
-        return $this->hasMany('App\Comment');
+        return $this->hasMany(Comment::class, 'user_id');
     }
 
 
