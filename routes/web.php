@@ -19,13 +19,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'show'])->name('show');
-Route::post('/', [App\Http\Controllers\HomeController::class, 'storePhoneNumber'])->name('store number');
-Route::post('/custom', [App\Http\Controllers\HomeController::class, 'sendMessage'])->name('send message');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'show']);
+
+Route::get('login', [App\Http\Controllers\UserAuthController::class, 'login']);
+Route::get('sendSMS', [App\Http\Controllers\UserAuthController::class, 'confirm']);
 
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::post('/home', [HomeController::class ,'upload'])->name('upload');
-Route::get('/show', [UserController::class, 'show'])->name('show');
+Route::get('/show', [UserController::class, 'show']);
+Route::get('/push-notificaiton', [NotificationController::class, 'index']);
+Route::post('/store-token', [NotificationController::class, 'storeToken']);
+Route::post('/send-notification', [NotificationController::class, 'sendNotification']);

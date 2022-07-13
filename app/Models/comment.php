@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class comment extends Model
 {
     use HasFactory, SoftDeletes;
-   
+
 
     public function user()
     {

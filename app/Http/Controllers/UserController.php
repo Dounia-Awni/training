@@ -3,10 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Post;
 
 class UserController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth')->only(['show']);
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users= User::all();
+        return response()->json(['data'=>$users],200);
     }
 
     /**
@@ -35,7 +43,29 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password'=> 'required|min:8|confirmed',
+            'phone_number' => 'required|numeric|unique:users,phone_number',
+        ]);
+        if (!$validator->fails()) {
+
+            $user = new User();
+            $user->name = $request->get('name');
+            $user->email = $request->get('email');
+            $user->password = Hash::make("password");
+            $user->phone_number=$request->get('phone_number');
+            $isSaved = $user->save();
+            if ($isSaved) {
+                return response()->json(['message' => $isSaved ? "Saved successfully" : "Failed to save"], $isSaved ? 201 : 400);
+            } else {
+                return response()->json(['message' => "Failed to save"], 400);
+            }
+
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], 400);
+        }
     }
 
     /**
@@ -70,7 +100,28 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|confirmed',
+            'phone_number' => 'required|numeric|unique:users,phone_number',
+        ]);
+        if (!$validator->fails()) {
+
+            $user = new User();
+            $user->name = $request->get('name');
+            $user->email = $request->get('email');
+            $user->password = Hash::make("password");
+            $user->phone_number = $request->get('phone_number');
+            $isSaved = $user->save();
+            if ($isSaved) {
+                return response()->json(['message' => $isSaved ? "Saved successfully" : "Failed to save"], $isSaved ? 201 : 400);
+            } else {
+                return response()->json(['message' => "Failed to save"], 400);
+            }
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], 400);
+        }
     }
 
     /**
@@ -79,8 +130,20 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $isDeleted = $user->delete();
+        return response()->json(['message' => $isDeleted ? "Deleted successfully" : "Failed to delete"], $isDeleted ? 200 : 400);
     }
+
+    public function upload(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            $filename = $request->image->getClientOriginalName();
+            $request->image->storeAs('images', $filename, 'public');
+            //Auth()->user()->update(['image' => $filename]);
+        }
+        return redirect()->back();
+    }
+
 }

@@ -28,6 +28,8 @@ class User extends Authenticatable
         'password',
         'image',
         'phone_number',
+        'fcm_token',
+        'status_active',
     ];
 
     /**
@@ -65,6 +67,10 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->hasMany(Notification::class, 'user_id');
+    }
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'user_id');
     }
 
 
