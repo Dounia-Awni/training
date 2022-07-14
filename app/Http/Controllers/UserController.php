@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
-use App\Models\Post;
-use App\Notifications\CommentOnPost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
-class CommentController extends Controller
+class UserController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth')->only(['show']);
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,8 +20,8 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::all();
-        return response()->json(['data' => $comments], 200);
+        $users= User::all();
+        return response()->json(['data'=>$users],200);
     }
 
     /**
@@ -27,9 +31,17 @@ class CommentController extends Controller
      */
     public function create(Request $request)
     {
-        Comment::create([
-            'content' => $request->get('content'),
-        ]);
+            $user = new User();
+            $user->name = $request->get('name');
+            $user->email = $request->get('email');
+            $user->password = Hash::make("password");
+            $user->phone_number = $request->get('phone_number');
+            $isSaved = $user->save();
+            if ($isSaved) {
+                return response()->json(['message' => $isSaved ? "Created successfully" : "Failed to create"], $isSaved ? 201 : 400);
+            } else {
+                return response()->json(['message' => "Failed to save"], 400);
+            }
     }
 
     /**
@@ -41,33 +53,28 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $validator = Validator($request->all(), [
-            'content' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password'=> 'required|min:8|confirmed',
+            'phone_number' => 'required|numeric|unique:users,phone_number',
         ]);
-
         if (!$validator->fails()) {
 
-            $comment = new Comment();
-            $comment->content = $request->get('content');
-            $isSaved = $comment->save();
+            $user = new User();
+            $user->name = $request->get('name');
+            $user->email = $request->get('email');
+            $user->password = Hash::make("password");
+            $user->phone_number=$request->get('phone_number');
+            $isSaved = $user->save();
             if ($isSaved) {
                 return response()->json(['message' => $isSaved ? "Saved successfully" : "Failed to save"], $isSaved ? 201 : 400);
             } else {
                 return response()->json(['message' => "Failed to save"], 400);
             }
+
         } else {
             return response()->json(['message' => $validator->getMessageBag()->first()], 400);
         }
-
-    
-        $comment = Comment::create($request->all());
-
-        if ($comment && $comment->post && $comment->post->user) {
-            $comment->post->user->notify(new CommentOnPost($comment));
-
-            return redirect()->back()->with('success', 'Comment Submitted Successfuly');
-        }
-        return redirect()->back()->withErrors(['error' => 'Something wrong while creating comment!']);
-    
     }
 
     /**
@@ -78,8 +85,8 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        $comment = Comment::findOrFail($id);
-        return response()->json(['data' => $comment], 200);
+        $user= User::findOrFail($id);
+        return response()->json(['data'=>$user],200);
     }
 
     /**
@@ -100,19 +107,22 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $id)
     {
-        $this->authorize('update', $comment);
-
         $validator = Validator($request->all(), [
-            'content' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|confirmed',
+            'phone_number' => 'required|numeric|unique:users,phone_number',
         ]);
-
         if (!$validator->fails()) {
 
-            $comment = new Comment();
-            $comment->content = $request->get('content');
-            $isSaved = $comment->save();
+            $user = new User();
+            $user->name = $request->get('name');
+            $user->email = $request->get('email');
+            $user->password = Hash::make("password");
+            $user->phone_number = $request->get('phone_number');
+            $isSaved = $user->save();
             if ($isSaved) {
                 return response()->json(['message' => $isSaved ? "Saved successfully" : "Failed to save"], $isSaved ? 201 : 400);
             } else {
@@ -129,10 +139,20 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy(User $user)
     {
-        $this->authorize('delete', $comment);
-        $isDeleted = $comment->delete();
+        $isDeleted = $user->delete();
         return response()->json(['message' => $isDeleted ? "Deleted successfully" : "Failed to delete"], $isDeleted ? 200 : 400);
     }
+
+    public function upload(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            $filename = $request->image->getClientOriginalName();
+            $request->image->storeAs('images', $filename, 'public');
+            //Auth()->user()->update(['image' => $filename]);
+        }
+        return redirect()->back();
+    }
+
 }
