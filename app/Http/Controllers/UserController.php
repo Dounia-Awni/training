@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\Post;
 
 class UserController extends Controller
 {
@@ -30,9 +29,19 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+            $user = new User();
+            $user->name = $request->get('name');
+            $user->email = $request->get('email');
+            $user->password = Hash::make("password");
+            $user->phone_number = $request->get('phone_number');
+            $isSaved = $user->save();
+            if ($isSaved) {
+                return response()->json(['message' => $isSaved ? "Created successfully" : "Failed to create"], $isSaved ? 201 : 400);
+            } else {
+                return response()->json(['message' => "Failed to save"], 400);
+            }
     }
 
     /**

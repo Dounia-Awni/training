@@ -30,6 +30,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::post('/home', [HomeController::class ,'upload'])->name('upload');
 Route::get('/show', [UserController::class, 'show']);
-Route::get('/push-notificaiton', [NotificationController::class, 'index']);
-Route::post('/store-token', [NotificationController::class, 'storeToken']);
-Route::post('/send-notification', [NotificationController::class, 'sendNotification']);
+Route::get('/push-notificaiton', [Controller::class, 'index']);
+Route::post('/store-token', [Controller::class, 'storeToken']);
+Route::post('/send-notification', [Controller::class, 'sendNotification']);

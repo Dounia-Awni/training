@@ -27,7 +27,8 @@ class PostController extends Controller
     {
         Post::create([
             'content' => $request->get('content'),
-            'user_id' => api('auth')->user()->id,
+            //'user_id' => api('auth')->user()->id,
+  
         ]);
     }
 
@@ -64,8 +65,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post,$id)
     {
+        $this->authorize('view', $post);
         $post = Post::findOrFail($id);
         return response()->json(['data' => $post], 200);
     }
