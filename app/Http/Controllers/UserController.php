@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -19,47 +18,66 @@ class UserController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function add(Request $request)
+    public function store(Request $request)
     {
-        $user=new User;
-        $user->name=$request->name;
+        $user = new User;
+        $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
-        $result=$user->save();
-        if($result){
-            return["Result"=>"user created succesfully"];
-        }
-        else{
+        $result = $user->save();
+        if ($result) {
+            return ["Result" => "user created succesfully"];
+        } else {
             return ["Result" => "Failed"];
         }
-        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-       $user=User::findorFail($id);
-       return response()->json(['data'=>$user],200);
+        $user= User::findOrFail($id);
+        return response()->json(['data'=>$user],200);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -67,7 +85,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)

@@ -21,6 +21,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::post('/home', 'HomeController@upload');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::post("store", [UserController::class], 'store');
+Route::get("show", [UserController::class], 'show');
+Route::post('/home', [HomeController::class], 'upload');
