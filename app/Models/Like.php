@@ -4,19 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Like extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     public function user()
     {
-        $this->belongsTo('App\User');
+        $this->belongsTo(User::class, 'id');
     }
 
     public function post()
     {
-        $this->belongsTo('App\Post');
+        $this->belongsTo(Post::class, 'user_id');
     }
 
 
