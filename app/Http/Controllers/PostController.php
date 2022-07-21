@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+    //
     /**
      * Display a listing of the resource.
      *
@@ -28,7 +32,7 @@ class PostController extends Controller
         Post::create([
             'content' => $request->get('content'),
             //'user_id' => api('auth')->user()->id,
-  
+
         ]);
     }
 
@@ -65,7 +69,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post,$id)
+    public function show(Post $post, $id)
     {
         $this->authorize('view', $post);
         $post = Post::findOrFail($id);
@@ -90,7 +94,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Post $post)
+    public function update(Request $request, Post $post)
     {
         $this->authorize('update', $post);
         $validator = Validator($request->all(), [
@@ -123,6 +127,26 @@ class PostController extends Controller
         $this->authorize('delete', $post);
         $isDeleted = $post->delete();
         return response()->json(['message' => $isDeleted ? "Deleted successfully" : "Failed to delete"], $isDeleted ? 200 : 400);
+    }
+
+    public function storeMedia(Request $request)
+    {
+        $path = $request->file('image')->store('images', 's3');
+        $post = Post::create([
+            'filename' => basename($path),
+            // 'url' => Storage::disk('s3')->url($path),
+        ]);
+        if (!Storage::exists($path)) {
+            Storage::makeDirectory($path);
+        }
+
+        return $post;
+    }
+
+
+    public function showMedia(Post $post)
+    {
+        //return Storage::disk('s3')->response('images/' . $post->filename);
 
     }
 }

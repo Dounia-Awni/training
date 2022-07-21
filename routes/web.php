@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use App\Models\User;
+use App\Models\Media;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,21 +18,27 @@ use App\Models\User;
 |
 */
 
+
+
+Route::get('/', 'MediaController@create');
+Route::post('/', 'MediaController@store');
+Route::get('/{Media}', 'MediaController@show');
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'show']);
+// Route::get('/', [App\Http\Controllers\HomeController::class, 'show']);
 
-Route::get('login', [App\Http\Controllers\UserAuthController::class, 'login']);
-Route::get('sendSMS', [App\Http\Controllers\UserAuthController::class, 'confirm']);
+// Route::get('login', [App\Http\Controllers\UserAuthController::class, 'login']);
+// Route::get('sendSMS', [App\Http\Controllers\UserAuthController::class, 'confirm']);
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::post('/home', [HomeController::class ,'upload'])->name('upload');
-Route::get('/show', [UserController::class, 'show']);
-Route::get('/push-notificaiton', [Controller::class, 'index']);
-Route::post('/store-token', [Controller::class, 'storeToken']);
-Route::post('/send-notification', [Controller::class, 'sendNotification']);
+// Route::post('/home', [HomeController::class ,'upload'])->name('upload');
+// Route::get('/show', [UserController::class, 'show']);
+// Route::get('/push-notificaiton', [Controller::class, 'index']);
+// Route::post('/store-token', [Controller::class, 'storeToken']);
+// Route::post('/send-notification', [Controller::class, 'sendNotification']);

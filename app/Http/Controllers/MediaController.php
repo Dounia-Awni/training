@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Like;
+use App\Models\Media;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
-class LikeController extends Controller
+class MediaController extends Controller
 {
-    //
     /**
      * Display a listing of the resource.
      *
@@ -16,8 +16,7 @@ class LikeController extends Controller
      */
     public function index()
     {
-        $likes = Like::all();
-        return response()->json(['data' => $likes], 200);
+        //
     }
 
     /**
@@ -27,7 +26,7 @@ class LikeController extends Controller
      */
     public function create()
     {
-        //
+        return view('test');
     }
 
     /**
@@ -36,29 +35,39 @@ class LikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($id)
+    public function store(Request $request)
     {
-        $likes = Redis::get('user:like:' . $id);
+        $path = $request->file('media')->store('media', 's3');
+        $media = Media::create([
+            'filename' => basename($path),
+             'url'=> Storage::disk('s3')->url($path),
+        ]);
+
+        if (!Storage::exists($path)) {
+            Storage::makeDirectory($path);
+        }
+
+        return $media;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Media  $media
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Media $media)
     {
-        $likes = Redis::get('user:like:' . $id);
+        return $media->url;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Media  $media
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Media $media)
     {
         //
     }
@@ -67,10 +76,10 @@ class LikeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Media  $media
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Media $media)
     {
         //
     }
@@ -78,13 +87,13 @@ class LikeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Media  $media
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Like $like)
+    public function destroy(Media $media)
     {
-        $this->authorize('delete', $like);
-        $isDeleted = $like->delete();
-        return response()->json(['message' => $isDeleted ? "Deleted successfully" : "Failed to delete"], $isDeleted ? 200 : 400);
+        Storage::disk('s3')->delete('media/' . $media);
+
+        return back()->withSuccess('media was deleted successfully');
     }
 }
