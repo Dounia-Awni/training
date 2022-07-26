@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Input;
@@ -16,8 +17,7 @@ use Illuminate\Support\Facades\Input;
 |
 */
 
-Route::middleware('auth:passport')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+
 
 

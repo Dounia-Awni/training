@@ -21,16 +21,6 @@ class LikeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -38,7 +28,8 @@ class LikeController extends Controller
      */
     public function store($id)
     {
-        $likes = Redis::get('user:like:' . $id);
+        $redis = new \Predis\Client();
+        $redis->set('post :like:' . $id);
     }
 
     /**
@@ -49,30 +40,8 @@ class LikeController extends Controller
      */
     public function show($id)
     {
-        $likes = Redis::get('user:like:' . $id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        $redis = new \Predis\Client();
+        $redis->get('post:like:');
     }
 
     /**

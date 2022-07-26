@@ -5,9 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
 
-                <button id="btn-nft-enable" onclick="startFCM()"
-                    class="btn btn-danger btn-xs btn-flat">Allow for Notification
-                </button>
+            <button id="btn-nft-enable" onclick="startFCM()" class="btn btn-danger btn-xs btn-flat">
+                Allow for Notification
+            </button>
 
             <div class="card mt-3">
                 <div class="card-body">
@@ -17,7 +17,7 @@
                     </div>
                     @endif
 
-                    <form action="{{ route('send.web-notification') }}" method="POST">
+                    <form action="{{ route('send.notification') }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label>Message Title</label>
@@ -62,32 +62,32 @@
             .then(function (token) {
                 console.log(token);
             
-            $.ajaxSetup({
-                headers: {
+             $.ajaxSetup({
+                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-            });
+             });
             
             $.ajax({
-                url: '{{ route("save-token") }}',
+                url: '{{ route("store.token") }}',
                 type: 'POST',
                 data: {
-                    token: token
+                 token: token
                 },
-
-            dataType: 'JSON',
-            success: function (response) {
-            alert('Token saved successfully.');
-            },
-            error: function (err) {
-            console.log('User Chat Token Error' + err);
-            },
+            
+                dataType: 'JSON',
+                success: function (response) {
+                alert('Token saved successfully.');
+                },
+                error: function (err) {
+                console.log('User Chat Token Error' + err);
+                },
             });
             
             }).catch(function (err) {
             console.log('User Chat Token Error' + err);
             });
-            }
+    }
 
     messaging.onMessage(function (payload) {
         const title = payload.notification.title;
