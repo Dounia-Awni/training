@@ -26,6 +26,8 @@ Route::get('sendSMS', [App\Http\Controllers\UserAuthController::class, 'confirm'
 Auth::routes();
 
 
+
+
 Route::get('/push-notificaiton', [NotificationController::class, 'index']);
 Route::post('/store-token', [NotificationController::class, 'storeToken']);
 Route::post('/send-notification', [NotificationController::class, 'sendNotification']);
@@ -34,6 +36,7 @@ Route::post('/send-notification', [NotificationController::class, 'sendNotificat
 
 Route::post("store", [UserController::class], 'store');
 Route::get("show", [UserController::class], 'show');
+
 
 
 

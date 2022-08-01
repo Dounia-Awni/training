@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
-use Illuminate\Http\Request;
-use App\Models\User;
+
+;
 
 class NotificationController extends Controller
 {
@@ -15,15 +15,20 @@ class NotificationController extends Controller
 
     public function index()
     {
-        return view('home');
+        $notifications = Notification::all();
+        return response()->json(['data' => $notifications], 200);
     }
 
-    public function storeToken(Request $request)
-    {
-        //auth()->user()->update(['fcm_token' => $request->token]);
-        return response()->json(['Token successfully stored.']);
+    public function show($id){
+        $notifications = Notification::findOrFail($id);
+        return response()->json(['data' => $notifications], 200);
     }
 
+
+    public function destroy(Notification $notification){
+        $isDeleted = $notification->delete();
+        return response()->json(['message' => $isDeleted ? "Deleted successfully" : "Failed to delete"], $isDeleted ? 200 : 400);
+       } 
     public function sendNotification(Request $request)
     {
         $url = 'https://fcm.googleapis.com/fcm/send';
@@ -69,7 +74,7 @@ class NotificationController extends Controller
 
         // FCM response
         dd($result);
-
+}
 
 class NotificationsController extends Controller
 {

@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Carbon\Carbon;
 
 class CommentOnPost extends Notification
 {
@@ -16,9 +17,9 @@ class CommentOnPost extends Notification
      *
      * @return void
      */
-    public function __construct($reply)
+    public function __construct($comment)
     {
-        $this->reply = $reply;
+        $this->comment = $comment;
     }
 
     public function via($notifiable)
@@ -29,8 +30,8 @@ class CommentOnPost extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            //'repliedTime' => Carbon::now(),
-            'reply' => $this->reply,
+            'commentTime' => Carbon::now(),
+            'comment' => $this->comment,
             'user' => $notifiable
         ];
     }
