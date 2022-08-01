@@ -5,11 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
-class post extends Model
+class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
+
+    protected $fillable = [
+        'content'
+    ];
 
     public function user()
     {
@@ -19,5 +24,10 @@ class post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class, 'user_id');
+    }
+
+    public function media()
+    {
+        return $this->hasOne(Media::class, 'media_id');
     }
 }

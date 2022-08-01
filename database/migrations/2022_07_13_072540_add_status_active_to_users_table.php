@@ -14,7 +14,7 @@ class AddStatusActiveToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->integer('status_active')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddStatusActiveToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('status_active');
         });
     }
 }

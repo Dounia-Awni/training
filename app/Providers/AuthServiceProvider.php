@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Policies\CommentPolicy;
+use App\Policies\LikePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
@@ -16,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Post::class => PostPolicy::class,
-        Comment::class=> CommentPolicy::class,
+        Comment::class => CommentPolicy::class,
+        Like::class => LikePolicy::class,
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
 
@@ -28,6 +30,6 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-         Passport::routes();
+        Passport::routes();
     }
 }

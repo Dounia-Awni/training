@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use App\Models\User;
+use App\Models\Media;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,15 +18,22 @@ use App\Models\User;
 |
 */
 
+
+
+Route::get('/', 'MediaController@create');
+Route::post('/', 'MediaController@store');
+Route::get('/{Media}', 'MediaController@show');
+
 Route::get('/', function () {
     return view('welcome');
 });
 
 
-Route::get('login', [App\Http\Controllers\UserAuthController::class, 'login']);
-Route::get('sendSMS', [App\Http\Controllers\UserAuthController::class, 'confirm']);
 
-Auth::routes();
+// Route::get('login', [App\Http\Controllers\UserAuthController::class, 'login']);
+// Route::get('sendSMS', [App\Http\Controllers\UserAuthController::class, 'confirm']);
+
+// Auth::routes();
 
 
 
@@ -36,7 +46,6 @@ Route::post('/send-notification', [NotificationController::class, 'sendNotificat
 
 Route::post("store", [UserController::class], 'store');
 Route::get("show", [UserController::class], 'show');
-
 
 
 

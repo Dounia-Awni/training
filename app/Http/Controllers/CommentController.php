@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
-use App\Models\Post;
-use App\Notifications\CommentOnPost;
 use Illuminate\Http\Request;
+use App\Models\Comment;
+use App\Notifications\CommentOnPost;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $comments = Comment::all();
@@ -58,7 +52,7 @@ class CommentController extends Controller
             return response()->json(['message' => $validator->getMessageBag()->first()], 400);
         }
 
-    
+
         $comment = Comment::create($request->all());
 
         if ($comment && $comment->post && $comment->post->user) {
@@ -67,7 +61,6 @@ class CommentController extends Controller
             return redirect()->back()->with('success', 'Comment Submitted Successfuly');
         }
         return redirect()->back()->withErrors(['error' => 'Something wrong while creating comment!']);
-    
     }
 
     /**

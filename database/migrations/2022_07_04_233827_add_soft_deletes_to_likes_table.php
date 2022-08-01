@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPhoneNumberColumnToUsersTable extends Migration
+class AddSoftDeletesToLikesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddPhoneNumberColumnToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('phone_number')->default(00);
+        Schema::table('likes', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -25,8 +25,8 @@ class AddPhoneNumberColumnToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
+        Schema::table('likes', function (Blueprint $table) {
+            $table->dropSoftDeletes();
         });
     }
 }
