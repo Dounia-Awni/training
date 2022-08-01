@@ -11,11 +11,9 @@ class post extends Model
     use HasFactory, SoftDeletes;
 
 
-    
-
     public function user()
     {
-        return $this->belongsTo(User::class,'id');
+        return $this->belongsTo(User::class, 'id');
     }
 
     public function comments()
