@@ -30,4 +30,10 @@ class Post extends Model
     {
         return $this->hasOne(Media::class, 'media_id');
     }
+
+
+    public static function mostLiked(Builder $query){
+        return $query= Post::withCount('likes')->orderBy('likes_count','desc')->take(10)->get();
+    }
+
 }

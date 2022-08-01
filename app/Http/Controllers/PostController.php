@@ -129,24 +129,24 @@ class PostController extends Controller
         return response()->json(['message' => $isDeleted ? "Deleted successfully" : "Failed to delete"], $isDeleted ? 200 : 400);
     }
 
-    public function storeMedia(Request $request)
-    {
-        $path = $request->file('image')->store('images', 's3');
-        $post = Post::create([
-            'filename' => basename($path),
-            // 'url' => Storage::disk('s3')->url($path),
-        ]);
-        if (!Storage::exists($path)) {
-            Storage::makeDirectory($path);
-        }
+    // public function storeMedia(Request $request)
+    // {
+    //     $path = $request->file('image')->store('images', 's3');
+    //     $post = Post::create([
+    //         'filename' => basename($path),
+    //         // 'url' => Storage::disk('s3')->url($path),
+    //     ]);
+    //     if (!Storage::exists($path)) {
+    //         Storage::makeDirectory($path);
+    //     }
 
-        return $post;
-    }
+    //     return $post;
+    // }
 
 
-    public function showMedia(Post $post)
-    {
-        //return Storage::disk('s3')->response('images/' . $post->filename);
+    // public function showMedia(Post $post)
+    // {
+    //     //return Storage::disk('s3')->response('images/' . $post->filename);
 
-    }
+    // }
 }

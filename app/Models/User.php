@@ -19,7 +19,11 @@ class User extends Authenticatable
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
+     * 
      */
+
+    protected $guarded = [];
+
     protected $fillable = [
         'name',
         'email',
@@ -66,8 +70,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class, 'user_id');
     }
+
     public function likes()
     {
         return $this->hasMany(Like::class, 'user_id');
+    }
+
+    public function mostReactions(Builder $query)
+    {
+        return $query = User::withCount('likes')->orderBy('likes_count', 'desc')->take(10)->get();
+    }
+
+    public function lastRegistered(Builder $query)
+    {
+        return $query = User::latest()->take(10)->get();
     }
 }

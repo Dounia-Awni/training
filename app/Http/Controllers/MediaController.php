@@ -40,7 +40,7 @@ class MediaController extends Controller
         $path = $request->file('media')->store('media', 's3');
         $media = Media::create([
             'filename' => basename($path),
-             'url'=> Storage::disk('s3')->url($path),
+            'url' => Storage::disk('s3')->url($path),
         ]);
 
         if (!Storage::exists($path)) {
