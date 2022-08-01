@@ -5,7 +5,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Input;
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,6 +15,7 @@ use Illuminate\Support\Facades\Input;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 
 
 

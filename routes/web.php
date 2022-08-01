@@ -45,15 +45,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('login', [App\Http\Controllers\UserAuthController::class, 'login']);
-Route::get('sendSMS', [App\Http\Controllers\UserAuthController::class, 'confirm']);
+
+ Route::get('login', [App\Http\Controllers\UserAuthController::class, 'login']);
+ Route::get('sendSMS', [App\Http\Controllers\UserAuthController::class, 'confirm']);
+
 
 Auth::routes();
+
 
 Route::get('/fcm', [App\Http\Controllers\FcmController::class, 'index']);
 Route::post('/store-token', [App\Http\Controllers\FcmController::class, 'storeToken'])->name('store.token');;
 Route::post('/send-notification', [App\Http\Controllers\FcmController::class, 'sendNotification'])->name('send.notification');
 
-Route::post('/home', [HomeController::class ,'upload'])->name('upload');
-Route::get('/show', [UserController::class, 'show']);
-Route::get('/push-notificaiton', [Controller::class, 'index']);
+
+Route::post("store", [UserController::class], 'store');
+Route::get("show", [UserController::class], 'show');
+
+
+
