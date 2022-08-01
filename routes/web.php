@@ -28,17 +28,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/', [App\Http\Controllers\HomeController::class, 'show']);
+
 
 // Route::get('login', [App\Http\Controllers\UserAuthController::class, 'login']);
 // Route::get('sendSMS', [App\Http\Controllers\UserAuthController::class, 'confirm']);
 
 // Auth::routes();
 
-// Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-// Route::post('/home', [HomeController::class ,'upload'])->name('upload');
-// Route::get('/show', [UserController::class, 'show']);
-// Route::get('/push-notificaiton', [Controller::class, 'index']);
-// Route::post('/store-token', [Controller::class, 'storeToken']);
-// Route::post('/send-notification', [Controller::class, 'sendNotification']);
+
+
+Route::get('/push-notificaiton', [NotificationController::class, 'index']);
+Route::post('/store-token', [NotificationController::class, 'storeToken']);
+Route::post('/send-notification', [NotificationController::class, 'sendNotification']);
+
+
+
+Route::post("store", [UserController::class], 'store');
+Route::get("show", [UserController::class], 'show');
+
+
+

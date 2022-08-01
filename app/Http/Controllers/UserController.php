@@ -52,6 +52,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
         $validator = Validator($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -74,7 +75,6 @@ class UserController extends Controller
 
         } else {
             return response()->json(['message' => $validator->getMessageBag()->first()], 400);
-        }
     }
 
     /**
