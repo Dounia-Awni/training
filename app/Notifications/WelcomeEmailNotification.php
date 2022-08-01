@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -16,9 +17,9 @@ class WelcomeEmailNotification extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
+        $this->user= $user;
     }
 
     /**
@@ -41,10 +42,10 @@ class WelcomeEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->greeting('Hello, ' . $this->user->name)
-            ->line('Welcome to laravel.')
-            ->action('Explore', url('/'))
-            ->line('Thank you for using our application!');
+                    ->greeting('Hello, ' . $this->user->name)
+                    ->line('Welcome to laravel')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
